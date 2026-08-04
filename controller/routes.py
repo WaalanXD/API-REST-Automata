@@ -1,34 +1,35 @@
 # controller/routes.py
-from flask import Blueprint, request, jsonify
-from gateway.coordinator import process_conversion, process_simulation
 
-# Creamos un Blueprint para agrupar estas rutas
-controller_bp = Blueprint('controller', __name__)
+from fastapi import APIRouter, HTTPException
+from gateway.coordinator import AutomataGateway
 
+# El router sirve para registrar las rutas /convert y /simulate
+router = APIRouter()
 
-@controller_bp.route('/convert', methods=['POST'])
-def convert_nfa():
-    # 1. Recibir los datos de entrada
-    nfa_data = request.get_json()
+@router.post("/convert")
+def convert_nfa(payload: dict):
+    """
+    Ruta 1: Recibe el AFN en un diccionario/JSON y devuelve el AFD.
+    """
+    try:
+        resultado = AutomataGateway.process_conversion(payload)
+        return resultado
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
 
-    # 2. Validar que vengan datos (una validación básica de controlador)
-    if not nfa_data:
-        return jsonify({"error": "No JSON data provided"}), 400
+@router.post("/simulate")
+def simulate_dfa_endpoint(payload: dict):
+    """
+    Ruta 2: Recibe el AFD y la palabra a probar ('input_string').
+    """
+    try:
+        dfa = payload.get("dfa")
+        cadena = payload.get("input_string")
 
-    # 3. Pasar la responsabilidad al Gateway y retornar la respuesta
-    response_data = process_conversion(nfa_data)
-    return jsonify(response_data), 200
+        if dfa is None or cadena is None:
+            raise ValueError("Falta enviar el 'dfa' o el 'input_string' en el JSON")
 
-
-@controller_bp.route('/simulate', methods=['POST'])
-def simulate_dfa():
-    simulation_data = request.get_json()
-
-    if not simulation_data:
-        return jsonify({"error": "No JSON data provided"}), 400
-
-    response_data = process_simulation(simulation_data)
-    return jsonify(response_data), 200
-
-
-####memdiefwmiefwigretrgwewrefwfegrwewfefwefwef
+        resultado = AutomataGateway.process_simulation(dfa, cadena)
+        return resultado
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))

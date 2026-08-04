@@ -1,12 +1,51 @@
 ### GET request to example server
 GET https://examples.http-client.intellij.net/get
     ?generated-in=PyCharm
-
-###
-
-POST http://127.0.0.1:5000/convert
+### Prueba de Conversión AFN a AFD (Ejemplo del taller)
+POST http://127.0.0.1:8000/convert
 Content-Type: application/json
 
 {
-  "test": "data"
+  "states": [0, 1, 2, 3, 4, 5, 6, 7, 8],
+  "alphabet": ["a", "b"],
+  "initial": 0,
+  "accepting": [8],
+  "transitions": [
+    {
+      "from": 0,
+      "symbol": "a",
+      "to": 1
+    },
+    {
+      "from": 1,
+      "symbol": "b",
+      "to": 2
+    }
+  ]
+}
+
+
+### Prueba de Conversión AFN a AFD (Nivel Complejo)
+POST http://127.0.0.1:8000/convert
+Content-Type: application/json
+
+{
+  "states": [0, 1, 2, 3, 4, 5, 6, 7, 8],
+  "alphabet": ["a", "b"],
+  "initial": 0,
+  "accepting": [2, 8],
+  "transitions": [
+    {"from": 0, "symbol": "a", "to": 0},
+    {"from": 0, "symbol": "a", "to": 1},
+    {"from": 0, "symbol": "a", "to": 3},
+    {"from": 0, "symbol": "a", "to": 7},
+    {"from": 1, "symbol": "b", "to": 2},
+    {"from": 3, "symbol": "b", "to": 4},
+    {"from": 3, "symbol": "b", "to": 7},
+    {"from": 2, "symbol": "a", "to": 6},
+    {"from": 4, "symbol": "a", "to": 8},
+    {"from": 6, "symbol": "b", "to": 5},
+    {"from": 8, "symbol": "b", "to": 8},
+    {"from": 5, "symbol": "a", "to": 8}
+  ]
 }
