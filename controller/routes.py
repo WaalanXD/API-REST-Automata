@@ -29,3 +29,6 @@ def simulate_dfa():
 
     response_data = process_simulation(simulation_data)
     return jsonify(response_data), 200
+
+
+####memdiefwmiefwigretrgwewrefwfegrwewfefwefwef
