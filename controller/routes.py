@@ -19,7 +19,7 @@ def _require_payload_field(payload: dict, field_name: str):
 @router.post("/convert")
 def convert_nfa(payload: dict):
     """
-    Ruta 1: Recibe el AFN en un diccionario/JSON y devuelve el AFD.
+    Ruta 1: Recibe el NFA en un diccionario/JSON y devuelve el DFA.
     """
     try:
         if not isinstance(payload, dict):
@@ -39,7 +39,7 @@ def convert_nfa(payload: dict):
 @router.post("/simulate")
 def simulate_dfa_endpoint(payload: dict):
     """
-    Ruta 2: Recibe el AFD y la palabra a probar ('input_string').
+    Ruta 2: Recibe el DFA y la palabra a probar ('input_string').
     """
     try:
         if not isinstance(payload, dict):
