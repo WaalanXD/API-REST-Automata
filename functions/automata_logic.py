@@ -47,14 +47,14 @@ def nfa_a_dfa(datos_nfa: dict) -> dict:
                 nuevo_grupo.sort()
                 nombre_nuevo = "".join(map(str, nuevo_grupo))
 
-                transicion_afd = {
+                transicion_dfa = {
                     "from": nombre_actual,
                     "symbol": letra,
                     "to": nombre_nuevo
                 }
 
-                if transicion_afd not in transiciones_dfa:
-                    transiciones_dfa.append(transicion_afd)
+                if transicion_dfa not in transiciones_dfa:
+                    transiciones_dfa.append(transicion_dfa)
 
                 if nuevo_grupo not in procesados and nuevo_grupo not in por_procesar:
                     por_procesar.append(nuevo_grupo)
