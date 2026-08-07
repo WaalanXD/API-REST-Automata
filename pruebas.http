@@ -102,7 +102,7 @@ Content-Type: application/json
 }
 
 ### 5) Validation test: missing required field in /convert (should return 400)
-# Expected: 400 with detail: Missing required field: states
+# Expected: 400 with detail: Missing required NFA fields
 POST {{host}}/convert
 Content-Type: application/json
 
@@ -111,7 +111,7 @@ Content-Type: application/json
 }
 
 ### 6) Validation test: missing input_string in /simulate (should return 400)
-# Expected: 400 with detail: Missing required field: input_string
+# Expected: 400 with detail: Missing required fields: dfa or input_string
 POST {{host}}/simulate
 Content-Type: application/json
 
