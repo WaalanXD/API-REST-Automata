@@ -1,34 +1,32 @@
 # controller/routes.py
-from flask import Blueprint, request, jsonify
-from gateway.coordinator import process_conversion, process_simulation
+from fastapi import APIRouter, HTTPException
+from gateway.coordinator import AutomataGateway
 
-# Creamos un Blueprint para agrupar estas rutas
-controller_bp = Blueprint('controller', __name__)
+router = APIRouter()
 
-
-@controller_bp.route('/convert', methods=['POST'])
-def convert_nfa():
-    # 1. Recibir los datos de entrada
-    nfa_data = request.get_json()
-
-    # 2. Validar que vengan datos (una validación básica de controlador)
-    if not nfa_data:
-        return jsonify({"error": "No JSON data provided"}), 400
-
-    # 3. Pasar la responsabilidad al Gateway y retornar la respuesta
-    response_data = process_conversion(nfa_data)
-    return jsonify(response_data), 200
-
-
-@controller_bp.route('/simulate', methods=['POST'])
-def simulate_dfa():
-    simulation_data = request.get_json()
-
-    if not simulation_data:
-        return jsonify({"error": "No JSON data provided"}), 400
-
-    response_data = process_simulation(simulation_data)
-    return jsonify(response_data), 200
+@router.post("/convert")
+def convertir_nfa(carga: dict):
+    """
+    Ruta 1: Recibe el NFA en un JSON, valida que traiga los datos básicos y devuelve el DFA.
+    """
+    # 1. Validates input (Responsabilidad estricta del Controlador)
+    campos_requeridos = ["states", "alphabet", "initial", "accepting", "transitions"]
+    if not all(campo in carga for campo in campos_requeridos):
+        # Si falta algún campo, el controlador responde inmediatamente con un error 400.
+        raise HTTPException(status_code=400, detail="Missing required NFA fields")
+    
+    # 2. Pasa la responsabilidad al Gateway (El Gateway ejecutará y atrapará los errores/excepciones)
+    return AutomataGateway.procesar_conversion(carga)
 
 
-####memdiefwmiefwigretrgwewrefwfegrwewfefwefwef
+@router.post("/simulate")
+def simular_dfa_endpoint(carga: dict):
+    """
+    Ruta 2: Recibe el DFA y la palabra a probar ('input_string').
+    """
+    # 1. Validates input[cite: 1]
+    if "dfa" not in carga or "input_string" not in carga:
+        raise HTTPException(status_code=400, detail="Missing required fields: dfa or input_string")
+        
+    # 2. Pasa la responsabilidad al Gateway
+    return AutomataGateway.procesar_simulacion(carga["dfa"], carga["input_string"])

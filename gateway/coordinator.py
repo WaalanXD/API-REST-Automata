@@ -1,30 +1,25 @@
 # gateway/coordinator.py
+from functions.automata_logic import nfa_a_dfa, simular_dfa
 
-def process_conversion(nfa_data):
-    # Aquí irá el bloque try/except y la llamada a tu algoritmo real de 'functions'.
-    # Por ahora, devolvemos el ejemplo estático del documento para probar la API[cite: 1].
-    return {
-        "dfaStates": [
-            "0137",
-            "247",
-            "68",
-            "58",
-            "8"
-        ],
-        "transitions": [
-            # Aquí irán las transiciones generadas...
-        ],
-        "acceptingStates": [
-            "247",
-            "68",
-            "58",
-            "8"
-        ]
-    }
+class AutomataGateway:
+    @staticmethod
+    def procesar_conversion(carga: dict) -> dict:
+        """
+        Llama a la lógica central para convertir AFN a AFD y maneja excepciones.
+        """
+        try:
+            # Coordinar la ejecución (Responsabilidad 1)
+            return nfa_a_dfa(carga)
+        except Exception as e:
+            # Manejar excepciones (Responsabilidad 2)
+            return {"error": "Error interno al ejecutar el algoritmo de conversión.", "detalle": str(e)}
 
-def process_simulation(simulation_data):
-    # Aquí se llamará a la lógica de simulación[cite: 1].
-    return {
-        "path": ["0137", "247", "58"],
-        "accepted": True
-    }
+    @staticmethod
+    def procesar_simulacion(dfa: dict, cadena: str) -> dict:
+        """
+        Llama a la lógica central para simular el AFD y maneja excepciones.
+        """
+        try:
+            return simular_dfa(dfa, cadena)
+        except Exception as e:
+            return {"error": "Error interno al ejecutar la simulación.", "detalle": str(e)}
