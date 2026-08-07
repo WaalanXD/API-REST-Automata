@@ -1,8 +1,13 @@
 ### GET request to example server
+# Expected: 200 from external sample endpoint.
 GET https://examples.http-client.intellij.net/get
     ?generated-in=PyCharm
-### Prueba de Conversión AFN a AFD (Ejemplo del taller)
-POST http://127.0.0.1:8000/convert
+
+@host = http://127.0.0.1:8000
+
+### 1) Convert NFA to DFA (basic)
+# Expected: 200 with keys dfaStates, transitions, acceptingStates.
+POST {{host}}/convert
 Content-Type: application/json
 
 {
@@ -24,9 +29,9 @@ Content-Type: application/json
   ]
 }
 
-
-### Prueba de Conversión AFN a AFD (Nivel Complejo)
-POST http://127.0.0.1:8000/convert
+### 2) Convert NFA to DFA (complex assignment example)
+# Expected: 200 and acceptingStates should include 247, 68, 58, 8.
+POST {{host}}/convert
 Content-Type: application/json
 
 {
@@ -48,4 +53,72 @@ Content-Type: application/json
     {"from": 8, "symbol": "b", "to": 8},
     {"from": 5, "symbol": "a", "to": 8}
   ]
+}
+
+### 3) Simulate DFA (accepted example)
+# Expected: 200 and accepted = true.
+POST {{host}}/simulate
+Content-Type: application/json
+
+{
+  "dfa": {
+    "dfaStates": ["0", "0137", "247", "68", "58", "8"],
+    "transitions": [
+      { "from": "0", "symbol": "a", "to": "0137" },
+      { "from": "0137", "symbol": "a", "to": "0137" },
+      { "from": "0137", "symbol": "b", "to": "247" },
+      { "from": "247", "symbol": "a", "to": "68" },
+      { "from": "68", "symbol": "b", "to": "58" },
+      { "from": "58", "symbol": "a", "to": "8" },
+      { "from": "58", "symbol": "b", "to": "8" },
+      { "from": "8", "symbol": "b", "to": "8" }
+    ],
+    "acceptingStates": ["247", "68", "58", "8"]
+  },
+  "input_string": "aba"
+}
+
+### 4) Simulate DFA (rejected example)
+# Expected: 200 and accepted = false.
+POST {{host}}/simulate
+Content-Type: application/json
+
+{
+  "dfa": {
+    "dfaStates": ["0", "0137", "247", "68", "58", "8"],
+    "transitions": [
+      { "from": "0", "symbol": "a", "to": "0137" },
+      { "from": "0137", "symbol": "a", "to": "0137" },
+      { "from": "0137", "symbol": "b", "to": "247" },
+      { "from": "247", "symbol": "a", "to": "68" },
+      { "from": "68", "symbol": "b", "to": "58" },
+      { "from": "58", "symbol": "a", "to": "8" },
+      { "from": "58", "symbol": "b", "to": "8" },
+      { "from": "8", "symbol": "b", "to": "8" }
+    ],
+    "acceptingStates": ["247", "68", "58", "8"]
+  },
+  "input_string": "ab"
+}
+
+### 5) Validation test: missing required field in /convert (should return 400)
+# Expected: 400 with detail: Missing required field: states
+POST {{host}}/convert
+Content-Type: application/json
+
+{
+  "alphabet": ["a", "b"]
+}
+
+### 6) Validation test: missing input_string in /simulate (should return 400)
+# Expected: 400 with detail: Missing required field: input_string
+POST {{host}}/simulate
+Content-Type: application/json
+
+{
+  "dfa": {
+    "dfaStates": ["0"],
+    "transitions": [],
+    "acceptingStates": []
+  }
 }
