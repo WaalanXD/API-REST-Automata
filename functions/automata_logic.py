@@ -1,21 +1,21 @@
 # functions/automata_logic.py
 
-def nfa_to_dfa(nfa_data: dict) -> dict:
+def nfa_a_dfa(datos_nfa: dict) -> dict:
     """
     Convierte un AFN a AFD juntando los estados en cadenas de texto (ej: '0137').
     """
-    states = nfa_data["states"]
-    alphabet = nfa_data["alphabet"]
-    initial = nfa_data["initial"]
-    accepting = nfa_data["accepting"]
-    transitions = nfa_data["transitions"]
+    estados = datos_nfa["states"]
+    alfabeto = datos_nfa["alphabet"]
+    inicial = datos_nfa["initial"]
+    aceptacion = datos_nfa["accepting"]
+    transiciones = datos_nfa["transitions"]
 
-    estado_inicial_lista = [initial]
-    estado_inicial_nombre = str(initial)
+    estado_inicial_lista = [inicial]
+    estado_inicial_nombre = str(inicial)
 
-    dfa_states = [estado_inicial_nombre]
-    dfa_transitions = []
-    dfa_accepting = []
+    estados_dfa = [estado_inicial_nombre]
+    transiciones_dfa = []
+    aceptacion_dfa = []
 
     por_procesar = [estado_inicial_lista]
     procesados = []
@@ -28,20 +28,20 @@ def nfa_to_dfa(nfa_data: dict) -> dict:
 
         es_final = False
         for estado in grupo_actual:
-            if estado in accepting:
+            if estado in aceptacion:
                 es_final = True
                 break
 
-        if es_final and nombre_actual not in dfa_accepting:
-            dfa_accepting.append(nombre_actual)
+        if es_final and nombre_actual not in aceptacion_dfa:
+            aceptacion_dfa.append(nombre_actual)
 
-        for letra in alphabet:
+        for letra in alfabeto:
             nuevo_grupo = []
             for estado in grupo_actual:
-                for t in transitions:
-                    if t["from"] == estado and t["symbol"] == letra:
-                        if t["to"] not in nuevo_grupo:
-                            nuevo_grupo.append(t["to"])
+                for transicion in transiciones:
+                    if transicion["from"] == estado and transicion["symbol"] == letra:
+                        if transicion["to"] not in nuevo_grupo:
+                            nuevo_grupo.append(transicion["to"])
 
             if len(nuevo_grupo) > 0:
                 nuevo_grupo.sort()
@@ -53,36 +53,36 @@ def nfa_to_dfa(nfa_data: dict) -> dict:
                     "to": nombre_nuevo
                 }
 
-                if transicion_afd not in dfa_transitions:
-                    dfa_transitions.append(transicion_afd)
+                if transicion_afd not in transiciones_dfa:
+                    transiciones_dfa.append(transicion_afd)
 
                 if nuevo_grupo not in procesados and nuevo_grupo not in por_procesar:
                     por_procesar.append(nuevo_grupo)
-                    if nombre_nuevo not in dfa_states:
-                        dfa_states.append(nombre_nuevo)
+                    if nombre_nuevo not in estados_dfa:
+                        estados_dfa.append(nombre_nuevo)
 
     return {
-        "dfaStates": dfa_states,
-        "transitions": dfa_transitions,
-        "acceptingStates": dfa_accepting
+        "dfaStates": estados_dfa,
+        "transitions": transiciones_dfa,
+        "acceptingStates": aceptacion_dfa
     }
 
-def simulate_dfa(dfa_data: dict, input_string: str) -> dict:
+def simular_dfa(datos_dfa: dict, cadena_entrada: str) -> dict:
     """
     Recorre la palabra letra por letra sobre el AFD ya generado.
     """
-    estados_dfa = dfa_data["dfaStates"]
-    transiciones = dfa_data["transitions"]
-    estados_aceptacion = dfa_data["acceptingStates"]
+    estados_dfa = datos_dfa["dfaStates"]
+    transiciones = datos_dfa["transitions"]
+    estados_aceptacion = datos_dfa["acceptingStates"]
 
     estado_actual = estados_dfa[0]
     camino = [estado_actual]
 
-    for letra in input_string:
+    for letra in cadena_entrada:
         se_movio = False
-        for t in transiciones:
-            if t["from"] == estado_actual and t["symbol"] == letra:
-                estado_actual = t["to"]
+        for transicion in transiciones:
+            if transicion["from"] == estado_actual and transicion["symbol"] == letra:
+                estado_actual = transicion["to"]
                 camino.append(estado_actual)
                 se_movio = True
                 break

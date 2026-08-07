@@ -1,19 +1,19 @@
 # gateway/coordinator.py
 
-from functions.automata_logic import nfa_to_dfa, simulate_dfa
+from functions.automata_logic import nfa_a_dfa, simular_dfa
 
 class AutomataGateway:
     @staticmethod
-    def process_conversion(payload: dict) -> dict:
+    def procesar_conversion(carga: dict) -> dict:
         """
         Llama a la lógica central para convertir AFN a AFD.
         """
-        # Aquí podrías agregar validaciones adicionales del payload si lo deseas
-        return nfa_to_dfa(payload)
+        # Aquí podrías agregar validaciones adicionales de la carga si lo deseas.
+        return nfa_a_dfa(carga)
 
     @staticmethod
-    def process_simulation(dfa: dict, cadena: str) -> dict:
+    def procesar_simulacion(dfa: dict, cadena: str) -> dict:
         """
         Llama a la lógica central para simular el AFD.
         """
-        return simulate_dfa(dfa, cadena)
+        return simular_dfa(dfa, cadena)
