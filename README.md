@@ -2,7 +2,7 @@
 
 ## Overview
 
-This project is a REST web server that converts a Non-deterministic Finite Automaton (NFA) into an equivalent Deterministic Finite Automaton (DFA) using the subset construction algorithm.
+This project is a REST web server that converts a non-deterministic finite automaton (NFA) into an equivalent deterministic finite automaton (DFA) using the subset construction algorithm.
 
 The application also includes a DFA simulation endpoint that evaluates an input string and returns the traversal path plus the final acceptance result.
 
@@ -14,7 +14,7 @@ The application also includes a DFA simulation endpoint that evaluates an input 
 - Main framework: FastAPI 0.141.1
 - ASGI server: Uvicorn 0.52.1
 
-## Project Structure
+## Project structure
 
 - `app.py`: FastAPI application entry point
 - `controller/routes.py`: HTTP routes
@@ -25,7 +25,7 @@ The application also includes a DFA simulation endpoint that evaluates an input 
 ## How to Run
 
 1. Open a terminal in the project root.
-2. Activate the virtual environment on Windows:
+2. Activate on windows the virtual environment:
 
 	 ```powershell
 	 .venv\Scripts\activate
