@@ -5,9 +5,10 @@ def nfa_a_dfa(datos_nfa: dict) -> dict:
     aceptacion=datos_nfa["accepting"]
     transiciones=datos_nfa["transitions"]
 
-    estado_inicial_lista=[inicial]
-    estado_inicial_nombre= str(inicial)
-
+    iniciales = datos_nfa["initial"] 
+    estado_inicial_lista = sorted(list(set(iniciales))) 
+    estado_inicial_nombre = "".join(map(str, estado_inicial_lista))
+    
     estados_dfa=[estado_inicial_nombre]
     transiciones_dfa=[]
     aceptacion_dfa=[]

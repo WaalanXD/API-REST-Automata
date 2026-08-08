@@ -53,7 +53,7 @@ Example request body:
 {
 	"states": [0, 1, 2, 3, 4, 5, 6, 7, 8],
 	"alphabet": ["a", "b"],
-	"initial": 0,
+	"initial": [0],
 	"accepting": [8],
 	"transitions": [
 		{ "from": 0, "symbol": "a", "to": 1 },
