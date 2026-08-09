@@ -7,7 +7,7 @@ GET https://examples.http-client.intellij.net/get
 
 ### 1) Convert NFA to DFA (basic)
 # Expected: 200 with keys dfaStates, transitions, acceptingStates.
-POST {{host}}/convert
+POST 127.0.0.1:8000/convert
 Content-Type: application/json
 
 {
@@ -31,7 +31,7 @@ Content-Type: application/json
 
 ### 2) Convert NFA to DFA (complex assignment example)
 # Expected: 200 and acceptingStates should include 247, 68, 58, 8.
-POST {{host}}/convert
+POST 127.0.0.1:8000/convert
 Content-Type: application/json
 
 {
@@ -57,7 +57,7 @@ Content-Type: application/json
 
 ### 3) Simulate DFA (accepted example)
 # Expected: 200 and accepted = true.
-POST {{host}}/simulate
+POST 127.0.0.1:8000/simulate
 Content-Type: application/json
 
 {
@@ -80,7 +80,7 @@ Content-Type: application/json
 
 ### 4) Simulate DFA (rejected example)
 # Expected: 200 and accepted = false.
-POST {{host}}/simulate
+POST 127.0.0.1:8000/simulate
 Content-Type: application/json
 
 {
@@ -103,7 +103,7 @@ Content-Type: application/json
 
 ### 5) Validation test: missing required field in /convert (should return 400)
 # Expected: 400 with detail: Missing required NFA fields
-POST {{host}}/convert
+POST 127.0.0.1:8000/convert
 Content-Type: application/json
 
 {
@@ -112,7 +112,7 @@ Content-Type: application/json
 
 ### 6) Validation test: missing input_string in /simulate (should return 400)
 # Expected: 400 with detail: Missing required fields: dfa or input_string
-POST {{host}}/simulate
+POST 127.0.0.1:8000/simulate
 Content-Type: application/json
 
 {
