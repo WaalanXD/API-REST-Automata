@@ -33,9 +33,11 @@ The application also includes a DFA simulation endpoint that evaluates an input 
 
 3. Start the server:
 
-	 ```powershell
-	 uvicorn app:app --reload
-	 ```
+     ```powershell
+   #Install the dependencies: pip install fastapi uvicorn
+   
+     uvicorn app:app --reload
+     ```
 
 4. Open the interactive API documentation at:
 
@@ -66,11 +68,16 @@ Example response shape:
 
 ```json
 {
-	"dfaStates": ["0", "0137", "247"],
-	"transitions": [
-		{ "from": "0", "symbol": "a", "to": "0137" }
-	],
-	"acceptingStates": ["247"]
+    "dfaStates": [
+        "0",
+        "1",
+        "2"
+    ],
+    "transitions": [
+        { "from": "0", "symbol": "a", "to": "1" },
+        { "from": "1", "symbol": "b", "to": "2" }
+    ],
+    "acceptingStates": []
 }
 ```
 
@@ -98,8 +105,12 @@ Example response shape:
 
 ```json
 {
-	"path": ["0", "0137", "247"],
-	"accepted": true
+    "path": [
+        "0",
+        "0137",
+        "247"
+    ],
+    "accepted": true
 }
 ```
 
