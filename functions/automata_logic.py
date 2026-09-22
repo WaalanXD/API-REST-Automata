@@ -88,7 +88,12 @@ def simular_dfa(datos_dfa: dict, cadena_entrada: str)->dict:
 
     es_aceptada=estado_actual in estados_aceptacion
 
-    def minimize_dfa(n, alphabet, final_states, transitions):
+    return {
+        "path": camino,
+        "accepted": es_aceptada
+    }
+
+def minimize_dfa(n, alphabet, final_states, transitions):
     """
     Minimiza un DFA según el algoritmo de Kozen (Clases 13 y 14).
     :param n: int, número de estados (0 hasta n-1)
@@ -140,8 +145,3 @@ def simular_dfa(datos_dfa: dict, cadena_entrada: str)->dict:
     equivalent_pairs.sort()
     
     return equivalent_pairs
-
-    return {
-        "path": camino,
-        "accepted": es_aceptada
-    }
